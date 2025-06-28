@@ -104,9 +104,7 @@ SELECT ..., ISNULL(Value_Deal, 'None') ...
 FROM stg_Churn;
 Create Views for Power BI
 
-sql
-Copy
-Edit
+
 CREATE VIEW vw_ChurnData AS
 SELECT * FROM prod_Churn WHERE Customer_Status IN ('Churned', 'Stayed');
 
@@ -127,8 +125,6 @@ prod_Services (unpivoted)
 
 STEP 3: 📐 Power BI Measures
 DAX
-Copy
-Edit
 Total Customers = COUNT(prod_Churn[Customer_ID])
 
 New Joiners = CALCULATE(COUNT(prod_Churn[Customer_ID]), prod_Churn[Customer_Status] = "Joined")
@@ -152,37 +148,26 @@ Predicted churn count by segment
 Includes: State, Marital Status, Age Group, Contract Type
 
 STEP 5: 🧠 Python - Random Forest Churn Prediction
-python
-Copy
-Edit
+
 from sklearn.ensemble import RandomForestClassifier
 rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
 rf_model.fit(X_train, y_train)
 Preprocessing:
 
-python
-Copy
-Edit
+
 LabelEncoder, train_test_split, drop columns
 Evaluation:
 
-python
-Copy
-Edit
+
 from sklearn.metrics import classification_report, confusion_matrix
 print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
 Feature Importance:
 
-python
-Copy
-Edit
+
 sns.barplot(x=importances[indices], y=X.columns[indices])
 Predict New Joiners:
 
-python
-Copy
-Edit
 original_data['Customer_Status_Predicted'] = rf_model.predict(new_data)
 original_data.to_csv("Predictions.csv", index=False)
 STEP 6: 📈 Visualize Predicted Churn in Power BI
@@ -191,8 +176,6 @@ Load Predictions.csv into Power BI
 Use Measures:
 
 DAX
-Copy
-Edit
 Count Predicted Churner = COUNT(Predictions[Customer_ID])
 
 Title Predicted Churners = "COUNT OF PREDICTED CHURNERS : " & COUNT(Predictions[Customer_ID])
